@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>卡通昆蟲樂園 · 蝴蝶飛舞與甲蟲派對</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+      /* 設定背景 */
+body {
+    background-image: url('forest_bg.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* 蝴蝶的飛舞動畫 */
+.butterfly {
+    width: 50px;
+    height: 50px;
+    background: url('butterfly.png') no-repeat;
+    position: absolute;
+    animation: fly 10s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+@keyframes fly {
+    0% { top: 80%; left: 0%; transform: rotate(0deg); }
+    25% { top: 20%; left: 30%; transform: rotate(20deg); }
+    50% { top: 50%; left: 60%; transform: rotate(-20deg); }
+    100% { top: 80%; left: 100%; transform: rotate(0deg); }
+}
+
+/* 甲蟲的爬行動畫 */
+.beetle {
+    width: 40px;
+    height: 40px;
+    background: url('beetle.png') no-repeat;
+    position: absolute;
+    bottom: 0;
+    animation: crawl 15s infinite linear;
+}
+
+@keyframes crawl {
+    0% { left: -50px; }
+    100% { left: 100%; }
+}
+            min-height: 100vh;
+            background: linear-gradient(145deg, #c8e8b5 0%, #9fd3a3 50%, #7ebf7a 100%);
+            overflow-x: hidden;
+            position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="27" viewBox="0 0 24 27"><polygon points="2,2 22,13 12,16 2,25" fill="%23ffdd77" stroke="%23b35f1a" stroke-width="1.5" stroke-linejoin="round"/></svg>'), auto;
+        }
+
+        /* 夢幻草地 + 花朵裝飾 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 30%, rgba(255,240,170,0.2) 2%, transparent 3%),
+                              radial-gradient(circle at 85% 70%, rgba(255,200,150,0.25) 1.5%, transparent 2.5%);
+            background-size: 45px 45px, 60px 60px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 主內容層 */
+        .main-container {
+            position: relative;
+            z-index: 20;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px 25px 40px;
+        }
+
+        /* 標題區塊 + 管理員按鈕 */
+        .hero {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            background: linear-gradient(135deg, #f9f3c1, #ffe6a3);
+            display: inline-block;
+            padding: 12px 35px;
+            border-radius: 100px;
+            box-shadow: 0 12px 0 #aa7c4a;
+            color: #5a3e2b;
+            text-shadow: 2px 2px 0 #fff0b5;
+            letter-spacing: 2px;
+            border: 2px solid #f3cd81;
+        }
+        .admin-area {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .admin-btn {
+            background: #fff2cf;
+            border: 2px solid #c9924b;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: #744e24;
+            cursor: pointer;
+            transition: 0.1s;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 0 #b57c42;
+        }
+        .admin-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #b57c42;}
+
+        /* 控制面板兩大功能 */
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 25px 0 35px;
+        }
+        .action-card {
+            background: rgba(255, 251, 225, 0.92);
+            backdrop-filter: blur(6px);
+            border-radius: 48px;
+            padding: 12px 28px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            border: 2px solid #ffecb3;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+        }
+        .action-btn {
+            background: linear-gradient(115deg, #ffd89b, #f9b952);
+            border: none;
+            padding: 12px 32px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            color: #3c2a1b;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.07s linear;
+            box-shadow: 0 6px 0 #a0652c;
+        }
+        .action-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #a0652c;}
+
+        /* 昆蟲舞台 */
+        .stage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 25;
+        }
+        .insect-fly, .insect-crawl {
+            position: absolute;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: filter 0.2s;
+        }
+        .insect-fly { width: 95px; height: 95px; }
+        .insect-crawl { width: 80px; height: 80px; z-index: 28;}
+
+        /* 驚嚇動畫 */
+        .scare-fly { animation: flyScare 0.55s cubic-bezier(0.34, 1.2, 0.55, 1) forwards !important; }
+        .scare-crawl { animation: crawlShake 0.5s ease-out forwards !important; }
+        @keyframes flyScare {
+            0% { transform: scale(1) rotate(0deg); }
+            35% { transform: scale(1.5) rotate(35deg); }
+            75% { transform: scale(0.6) rotate(200deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+        @keyframes crawlShake {
+            0% { transform: translateY(0) rotate(0deg); }
+            30% { transform: translateY(-20px) rotate(15deg); }
+            70% { transform: translateY(10px) rotate(-25deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        /* 上傳及管理清單 */
+        .gallery-panel {
+            background: rgba(250, 245, 220, 0.95);
+            border-radius: 55px;
+            padding: 20px 25px;
+            margin-top: 20px;
+            backdrop-filter: blur(5px);
+            border: 2px solid #f5e2b2;
+        }
+        .section-title {
+            font-size: 1.7rem;
+            color: #5e3b22;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 3px dashed #e9cfa2;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        .bug-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            align-items: center;
+            min-height: 85px;
+        }
+        .custom-item {
+            background: #fffef7;
+            border-radius: 60px;
+            padding: 5px 15px 5px 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid #f7ddab;
+        }
+        .custom-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffc97a;
+            background: white;
+        }
+        .delete-single {
+            background: #ffc29e;
+            border: none;
+            padding: 5px 16px;
+            border-radius: 30px;
+            font-weight: bold;
+            color: #4a2a12;
+            cursor: pointer;
+        }
+        .empty-message {
+            color: #a28b64;
+            font-style: italic;
+            padding: 12px;
+        }
+
+        /* 繪圖畫板 modal */
+        .draw-modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(3px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .draw-modal.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .draw-container {
+            background: #fffaf0;
+            border-radius: 70px;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            border: 6px solid #f3ce94;
+        }
+        canvas {
+            background: white;
+            border-radius: 35px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin: 15px 0;
+            cursor: crosshair;
+        }
+        .draw-tools {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .draw-btn {
+            background: #ffe1b3;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: bold;
+        }
+        .color-preview {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid #7a4d28;
+        }
+        #drawingCanvas { width: 100%; height: auto; background: #fffdf5; }
+        
+        /* 音樂按鈕 */
+        .music-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 200;
+            background: #ffefc0;
+            border-radius: 50px;
+            padding: 10px 18px;
+            font-weight: bold;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            border: 1px solid #ffda94;
+        }
+
+        @media (max-width: 680px) {
+            .hero h1 { font-size: 2rem; padding: 8px 20px;}
+            .action-card { padding: 8px 16px;}
+            .action-btn { padding: 8px 20px; font-size: 1rem;}
+        }
+    </style>
+</head>
+<body>
+
+<div class="stage" id="insectStage"></div>
+
+<div class="main-container">
+    <div class="hero">
+        <h1>🐞 卡通昆蟲樂園 · 蝴蝶與甲蟲派對 🦋</h1>
+        <div class="admin-area">
+            <button class="admin-btn" id="adminModeBtn">🔧 管理員</button>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <div class="action-card">
+            <span>🐞</span>
+            <button class="action-btn" id="uploadMainBtn">📤 上傳作品</button>
+            <input type="file" id="uploadFileInput" accept="image/*" style="display:none">
+        </div>
+        <div class="action-card">
+            <span>🎨</span>
+            <button class="action-btn" id="drawBtn">✏️ 畫一隻昆蟲</button>
+        </div>
+    </div>
+
+    <div class="gallery-panel">
+        <div class="section-title">
+            <span>🐛 管理員專區 · 已召喚的自訂昆蟲</span>
+        </div>
+        <div id="customListContainer" class="bug-list">
+            <div id="emptyCustomMsg" class="empty-message">✨ 目前沒有自訂昆蟲，上傳或繪畫來增添夥伴吧 ✨</div>
+        </div>
+    </div>
+</div>
+
+<div class="music-float" id="musicBtn">🎵 播放輕快音樂</div>
+
+<!-- 繪圖模態框 -->
+<div id="drawModal" class="draw-modal">
+    <div class="draw-container">
+        <h3 style="color:#714623;">✏️ 即畫即生成昆蟲 ✨</h3>
+        <canvas id="drawingCanvas" width="500" height="400" style="width:100%; height:auto; max-width:500px; border:3px solid #e9bc7d;"></canvas>
+        <div class="draw-tools">
+            <button class="draw-btn" id="clearCanvasBtn">🧽 清除畫布</button>
+            <input type="color" id="penColor" value="#ff9966">
+            <span>✏️ 畫筆</span>
+            <button class="draw-btn" id="confirmDrawBtn">✅ 完成 · 生成昆蟲</button>
+            <button class="draw-btn" id="closeDrawBtn">❌ 關閉</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        // ------------------- 生態系統 -----------------
+        const stage = document.getElementById('insectStage');
+        // 蝴蝶飛舞 (4隻)
+        const butterflySVG = `<svg viewBox="0 0 100 100"><ellipse cx="30" cy="48" rx="26" ry="30" fill="#ffba7a" stroke="#b35f1a" stroke-width="1.8"/><ellipse cx="70" cy="48" rx="26" ry="30" fill="#ffba7a" stroke="#b35f1a" stroke-width="1.8"/><circle cx="50" cy="50" r="18" fill="#ff9866"/><path d="M 50 30 Q 45 25 48 18" stroke="#ff6b35" stroke-width="1.5" fill="none"/><path d="M 50 30 Q 55 25 52 18" stroke="#ff6b35" stroke-width="1.5" fill="none"/></svg>`;
+        // 甲蟲爬行 (4隻)
+        const beetleSVG = `<svg viewBox="0 0 100 100"><circle cx="50" cy="58" r="32" fill="#ce7e42" stroke="#825a2e" stroke-width="2"/><line x1="50" y1="28" x2="50" y2="86" stroke="#402c18" stroke-width="3"/><circle cx="50" cy="30" r="12" fill="#8b5a28"/><line x1="35" y1="50" x2="20" y2="55" stroke="#8b5a28" stroke-width="2"/><line x1="65" y1="50" x2="80" y2="55" stroke="#8b5a28" stroke-width="2"/><line x1="35" y1="65" x2="20" y2="75" stroke="#8b5a28" stroke-width="2"/><line x1="65" y1="65" x2="80" y2="75" stroke="#8b5a28" stroke-width="2"/></svg>`;
+        
+        let butterflies = [];
+        let beetles = [];
+        let customMap = new Map();   // 自訂昆蟲 { id, element, kill, imgSrc }
+        let customCounter = 0;
+        let adminMode = false;
+        
+        // ----- 飛行蝴蝶動畫 (優雅) -----
+        function createButterfly() {
+            const div = document.createElement('div');
+            div.className = 'insect-fly';
+            div.innerHTML = butterflySVG;
+            stage.appendChild(div);
+            let x = Math.random() * (window.innerWidth - 130);
+            let y = Math.random() * (window.innerHeight - 250);
+            let angle = Math.random() * Math.PI * 2;
+            let speed = 1.0 + Math.random() * 0.8;
+            let curSpeed = speed;
+            let scare = 0;
+            let active = true;
+            const scareFn = (e) => {
+                e.stopPropagation();
+                scare = 30;
+                angle += (Math.random() - 0.5) * 1.2;
+                div.classList.add('scare-fly');
+                setTimeout(() => div.classList.remove('scare-fly'), 550);
+            };
+            div.addEventListener('click', scareFn);
+            function animate() {
+                if (!active) return;
+                if (scare > 0) { scare--; curSpeed = speed * 4.8; }
+                else { angle += (Math.random() - 0.5) * 0.12; curSpeed = speed + Math.sin(Date.now() * 0.006) * 0.3; }
+                x += Math.cos(angle) * curSpeed;
+                y += Math.sin(angle) * curSpeed;
+                if (x < -150) x = window.innerWidth;
+                if (x > window.innerWidth) x = -150;
+                if (y < -150) y = window.innerHeight - 180;
+                if (y > window.innerHeight - 180) y = -150;
+                const flip = Math.cos(angle) < 0 ? -1 : 1;
+                div.style.transform = `translate(${x}px, ${y}px) scaleX(${flip})`;
+                requestAnimationFrame(animate);
+            }
+            animate();
+            return { kill: () => { active = false; div.remove(); }, div };
+        }
+        
+        // ----- 甲蟲爬行動畫 (地板左右走 + 隨機跳躍)-----
+        function createBeetle() {
+            const div = document.createElement('div');
+            div.className = 'insect-crawl';
+            div.innerHTML = beetleSVG;
+            stage.appendChild(div);
+            let groundY = window.innerHeight - 140 + Math.random() * 60;
+            let x = Math.random() * (window.innerWidth - 120);
+            let direction = Math.random() > 0.5 ? 1 : -1;
+            let speed = 0.55 + Math.random() * 0.6;
+            let active = true;
+            let jumpCooldown = 0;
+            const scareCrawl = (e) => {
+                e.stopPropagation();
+                div.classList.add('scare-crawl');
+                setTimeout(() => div.classList.remove('scare-crawl'), 500);
+                direction *= -1;
+                speed += 0.8;
+                setTimeout(() => { if(active) speed = Math.max(0.5, speed-0.6); }, 400);
+            };
+            div.addEventListener('click', scareCrawl);
+            function crawlAnim() {
+                if (!active) return;
+                if (jumpCooldown <= 0 && Math.random() < 0.012) {
+                    jumpCooldown = 35;
+                    let originalTop = groundY;
+                    let jumpAnim = 0;
+                    function jumpLoop() {
+                        if (!active) return;
+                        if (jumpAnim < 12) {
+                            let offset = -Math.sin(jumpAnim * 0.5) * 12;
+                            div.style.top = (originalTop + offset) + 'px';
+                            jumpAnim++;
+                            requestAnimationFrame(jumpLoop);
+                        } else {
+                            div.style.top = groundY + 'px';
+                            jumpCooldown = 0;
+                        }
+                    }
+                    requestAnimationFrame(jumpLoop);
+                } else { if(jumpCooldown>0) jumpCooldown--; }
+                x += direction * speed;
+                if (x < -100) { x = -100; direction *= -1; }
+                if (x > window.innerWidth - 50) { x = window.innerWidth - 50; direction *= -1; }
+                div.style.left = x + 'px';
+                div.style.top = groundY + 'px';
+                const scaleX = direction === 1 ? 1 : -1;
+                div.style.transform = `scaleX(${scaleX})`;
+                requestAnimationFrame(crawlAnim);
+            }
+            div.style.position = 'absolute';
+            div.style.left = x + 'px';
+            div.style.top = groundY + 'px';
+            crawlAnim();
+            return { kill: () => { active = false; div.remove(); }, div };
+        }
+        
+        // 初始化昆蟲
+        for(let i=0;i<4;i++) butterflies.push(createButterfly());
+        for(let i=0;i<4;i++) beetles.push(createBeetle());
+        
+        // 視窗resize重新定位甲蟲地面高度 (簡易)
+        window.addEventListener('resize', () => {
+            beetles.forEach(b => { if(b.div && b.div.style) b.div.style.top = (window.innerHeight - 140 + Math.random() * 50) + 'px'; });
+        });
+        
+        // ----------------- 自訂昆蟲 (上傳或繪圖) 圓形徽章風格 -----------------
+        function addCustomInsect(imgData, name, type='upload') {
+            const id = `custom_${Date.now()}_${customCounter++}`;
+            const flyDiv = document.createElement('div');
+            flyDiv.className = 'insect-fly';
+            flyDiv.style.width = '100px';
+            flyDiv.style.height = '100px';
+            const badge = document.createElement('div');
+            badge.style.width = '100%';
+            badge.style.height = '100%';
+            badge.style.borderRadius = '50%';
+            badge.style.background = '#fff4e4';
+            badge.style.border = '4px solid #fbc472';
+            badge.style.boxShadow = '0 8px 15px rgba(0,0,0,0.2)';
+            badge.style.overflow = 'hidden';
+            const img = document.createElement('img');
+            img.src = imgData;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            badge.appendChild(img);
+            flyDiv.appendChild(badge);
+            stage.appendChild(flyDiv);
+            // 使用飛行引擎
+            let x = Math.random() * (window.innerWidth - 130);
+            let y = Math.random() * (window.innerHeight - 250);
+            let angle = Math.random() * Math.PI * 2;
+            let speed = 0.9 + Math.random() * 0.9;
+            let curSpeed = speed;
+            let scare = 0;
+            let active = true;
+            const scareFn = (e) => { e.stopPropagation(); scare = 35; angle += (Math.random() - 0.5) * 1.2; flyDiv.classList.add('scare-fly'); setTimeout(() => flyDiv.classList.remove('scare-fly'), 550); };
+            flyDiv.addEventListener('click', scareFn);
+            function animateCustom() {
+                if (!active) return;
+                if (scare > 0) { scare--; curSpeed = speed * 5; }
+                else { angle += (Math.random() - 0.5) * 0.13; curSpeed = speed + Math.sin(Date.now() * 0.0065) * 0.25; }
+                x += Math.cos(angle) * curSpeed;
+                y += Math.sin(angle) * curSpeed;
+                if (x < -150) x = window.innerWidth;
+                if (x > window.innerWidth) x = -150;
+                if (y < -150) y = window.innerHeight - 170;
+                if (y > window.innerHeight - 170) y = -150;
+                const flip = Math.cos(angle) < 0 ? -1 : 1;
+                flyDiv.style.transform = `translate(${x}px, ${y}px) scaleX(${flip})`;
+                requestAnimationFrame(animateCustom);
+            }
+            animateCustom();
+            const killFn = () => { active = false; flyDiv.remove(); };
+            customMap.set(id, { element: flyDiv, kill: killFn, imgSrc: imgData, name: name });
+            updateCustomListUI();
+            return id;
+        }
+        
+        function updateCustomListUI() {
+            const container = document.getElementById('customListContainer');
+            const emptyDiv = document.getElementById('emptyCustomMsg');
+            if (customMap.size === 0) {
+                if(!emptyDiv) {
+                    const newEmpty = document.createElement('div');
+                    newEmpty.id = 'emptyCustomMsg';
+                    newEmpty.className = 'empty-message';
+                    newEmpty.innerText = '✨ 目前沒有自訂昆蟲，上傳或繪畫來增添夥伴吧 ✨';
+                    container.innerHTML = '';
+                    container.appendChild(newEmpty);
+                } else emptyDiv.style.display = 'block';
+                return;
+            }
+            if(emptyDiv) emptyDiv.style.display = 'none';
+            container.innerHTML = '';
+            for(let [id, val] of customMap.entries()) {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'custom-item';
+                itemDiv.innerHTML = `
+                    <img src="${val.imgSrc}" class="custom-img">
+                    <span style="font-weight:500;">${val.name.length>15?val.name.slice(0,12)+'…':val.name}</span>
+                    ${adminMode ? `<button class="delete-single" data-id="${id}">🗑️ 刪除</button>` : ''}
+                `;
+                container.appendChild(itemDiv);
+                if(adminMode) {
+                    const delBtn = itemDiv.querySelector('.delete-single');
+                    delBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const record = customMap.get(id);
+                        if(record) { record.kill(); customMap.delete(id); }
+                        updateCustomListUI();
+                    });
+                }
+            }
+        }
+        
+        // 上傳圖片邏輯
+        const fileInput = document.getElementById('uploadFileInput');
+        const uploadBtn = document.getElementById('uploadMainBtn');
+        uploadBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    let shortName = file.name.length > 18 ? file.name.slice(0,15)+'...' : file.name;
+                    addCustomInsect(ev.target.result, shortName, 'upload');
+                    fileInput.value = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // 管理員模式切換
+        const adminBtn = document.getElementById('adminModeBtn');
+        adminBtn.addEventListener('click', () => {
+            adminMode = !adminMode;
+            adminBtn.style.background = adminMode ? '#c1e0a5' : '#fff2cf';
+            adminBtn.innerText = adminMode ? '🔧 管理員 (開啟)' : '🔧 管理員';
+            updateCustomListUI();
+        });
+        
+        // ---------- 即畫即生成圖片 ----------
+        const drawModal = document.getElementById('drawModal');
+        const drawCanvas = document.getElementById('drawingCanvas');
+        const ctx = drawCanvas.getContext('2d');
+        let painting = false;
+        function setCanvasSize() {
+            const rect = drawCanvas.getBoundingClientRect();
+            // 保持畫板比例
+            drawCanvas.width = 500;
+            drawCanvas.height = 400;
+            ctx.fillStyle = '#fffdf5';
+            ctx.fillRect(0,0,drawCanvas.width,drawCanvas.height);
+            ctx.strokeStyle = document.getElementById('penColor').value;
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+        }
+        setCanvasSize();
+        function startPainting(e) { painting = true; draw(e); }
+        function endPainting() { painting = false; ctx.beginPath(); }
+        function draw(e) {
+            if(!painting) return;
+            const rect = drawCanvas.getBoundingClientRect();
+            const scaleX = drawCanvas.width / rect.width;
+            const scaleY = drawCanvas.height / rect.height;
+            let clientX, clientY;
+            if(e.touches) { clientX = e.touches[0].clientX; clientY = e.touches[0].clientY; }
+            else { clientX = e.clientX; clientY = e.clientY; }
+            let x = (clientX - rect.left) * scaleX;
+            let y = (clientY - rect.top) * scaleY;
+            ctx.strokeStyle = document.getElementById('penColor').value;
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        drawCanvas.addEventListener('mousedown', startPainting);
+        drawCanvas.addEventListener('mouseup', endPainting);
+        drawCanvas.addEventListener('mousemove', draw);
+        drawCanvas.addEventListener('touchstart', startPainting);
+        drawCanvas.addEventListener('touchend', endPainting);
+        drawCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
+        document.getElementById('clearCanvasBtn').addEventListener('click', () => {
+            ctx.fillStyle = '#fffdf5';
+            ctx.fillRect(0,0,drawCanvas.width,drawCanvas.height);
+        });
+        document.getElementById('penColor').addEventListener('input', (e) => { ctx.strokeStyle = e.target.value; });
+        
+        document.getElementById('drawBtn').addEventListener('click', () => {
+            drawModal.classList.add('active');
+            setCanvasSize();
+            ctx.fillStyle = '#fffdf5';
+            ctx.fillRect(0,0,drawCanvas.width,drawCanvas.height);
+        });
+        document.getElementById('closeDrawBtn').addEventListener('click', () => drawModal.classList.remove('active'));
+        document.getElementById('confirmDrawBtn').addEventListener('click', () => {
+            const dataURL = drawCanvas.toDataURL('image/png');
+            addCustomInsect(dataURL, '手繪昆蟲', 'draw');
+            drawModal.classList.remove('active');
+        });
+        
+        // ---------- 輕快音樂 (合成木琴 + 打擊樂風格) ----------
+        let audioCtx = null;
+        let musicInterval = null;
+        let isMusicOn = false;
+        const musicButton = document.getElementById('musicBtn');
+        const notes = [65, 67, 69, 70, 72, 74, 76, 77];
+        function playCheerfulNote() {
+            if(!audioCtx || !isMusicOn) return;
+            const now = audioCtx.currentTime;
+            const midi = notes[Math.floor(Math.random() * notes.length)];
+            const freq = 440 * Math.pow(2, (midi - 69)/12);
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.1, now+0.03);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now+0.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(now+0.55);
+            if(Math.random() > 0.6){
+                const drum = audioCtx.createOscillator();
+                const drumGain = audioCtx.createGain();
+                drum.type = 'triangle';
+                drum.frequency.value = 140;
+                drumGain.gain.setValueAtTime(0.05, now);
+                drumGain.gain.exponentialRampToValueAtTime(0.0001, now+0.2);
+                drum.connect(drumGain);
+                drumGain.connect(audioCtx.destination);
+                drum.start();
+                drum.stop(now+0.2);
+            }
+        }
+        function startBgMusic() {
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            if(musicInterval) clearInterval(musicInterval);
+            musicInterval = setInterval(() => { if(isMusicOn && audioCtx && audioCtx.state === 'running') playCheerfulNote(); }, 420);
+        }
+        function toggleMusic() {
+            if(!isMusicOn) {
+                isMusicOn = true;
+                if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if(audioCtx.state === 'suspended') audioCtx.resume().then(() => startBgMusic());
+                else startBgMusic();
+                musicButton.innerHTML = "🎵 輕快音樂 (播放中) 🎶";
+                musicButton.style.background = "#ffe0a3";
+            } else {
+                isMusicOn = false;
+                if(musicInterval) clearInterval(musicInterval);
+                musicInterval = null;
+                musicButton.innerHTML = "🎵 播放輕快音樂";
+                musicButton.style.background = "#ffefc0";
+            }
+        }
+        musicButton.addEventListener('click', toggleMusic);
+        // 自動初始化，但不自動播放音樂，等待用戶點擊
+        updateCustomListUI();
+    })();
+</script>
+</body>
+</html>
